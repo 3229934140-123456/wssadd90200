@@ -1,0 +1,148 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: 80rpx;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-button;
+}
+
+.backText {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  margin-left: $spacing-xs;
+}
+
+.heroWrapper {
+  margin-bottom: $spacing-lg;
+}
+
+.relatedList {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.cardTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.relatedItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.relatedEmoji {
+  font-size: 40rpx;
+  margin-right: $spacing-md;
+}
+
+.relatedInfo {
+  flex: 1;
+}
+
+.relatedName {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.relatedReason {
+  font-size: 24rpx;
+  color: $color-text-tertiary;
+}
+
+.statusBadge {
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-button;
+  font-size: 24rpx;
+  font-weight: $font-weight-semibold;
+}
+
+.statusAllowed {
+  background-color: rgba(0, 180, 42, 0.1);
+  color: $color-success;
+}
+
+.statusWarning {
+  background-color: rgba(255, 125, 0, 0.1);
+  color: $color-warning;
+}
+
+.statusForbidden {
+  background-color: rgba(245, 63, 63, 0.1);
+  color: $color-error;
+}
+
+.statusConsult {
+  background-color: rgba(22, 93, 255, 0.1);
+  color: $color-info;
+}
+
+.tipsCard {
+  background-color: rgba(255, 107, 157, 0.08);
+  border: 2rpx solid rgba(255, 107, 157, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-lg;
+}
+
+.tipsIcon {
+  font-size: 40rpx;
+  margin-right: $spacing-sm;
+}
+
+.tipsText {
+  font-size: 28rpx;
+  color: $color-text-primary;
+  line-height: 1.8;
+  display: block;
+}
+
+.nutritionTitle {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+}
+
+.nutritionTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.nutritionTag {
+  padding: $spacing-xs $spacing-sm;
+  background-color: rgba(78, 205, 196, 0.15);
+  border-radius: $radius-button;
+  font-size: 24rpx;
+  color: $color-secondary;
+  font-weight: $font-weight-medium;
+}

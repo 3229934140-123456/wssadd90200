@@ -1,0 +1,345 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF1F0 0%, $color-bg-page 20%);
+  padding: 0 $page-padding;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  padding-top: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.warnBanner {
+  background: linear-gradient(135deg, $color-error 0%, #FF7875 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  color: $color-text-white;
+  margin-bottom: $spacing-lg;
+}
+
+.bannerTitle {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.bannerText {
+  font-size: 26rpx;
+  opacity: 0.95;
+  line-height: $line-height-loose;
+}
+
+.sectionTitle {
+  font-size: 34rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin: $spacing-lg 0 $spacing-md 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.abnormalCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  border: 3rpx solid transparent;
+  transition: all $transition-base;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.urgentCard {
+  border-color: rgba(245, 63, 63, 0.3);
+  background: linear-gradient(135deg, #FFF1F0 0%, #FFFFFF 100%);
+}
+
+.abnormalIcon {
+  font-size: 56rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.abnormalTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.abnormalDesc {
+  font-size: 24rpx;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.urgentBadge {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  padding: 4rpx 12rpx;
+  background-color: $color-error;
+  border-radius: $radius-button;
+  font-size: 20rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.selectedCard {
+  border-color: $color-error;
+  background: linear-gradient(135deg, #FFECE8 0%, #FFFFFF 100%);
+}
+
+.detailCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  border: 3rpx solid rgba(245, 63, 63, 0.3);
+}
+
+.detailHeader {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: $spacing-md;
+}
+
+.detailIcon {
+  font-size: 56rpx;
+  margin-right: $spacing-md;
+}
+
+.detailInfo {
+  flex: 1;
+}
+
+.detailName {
+  font-size: 34rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.detailTime {
+  font-size: 24rpx;
+  color: $color-error;
+  font-weight: $font-weight-semibold;
+  padding: 4rpx 12rpx;
+  background-color: rgba(245, 63, 63, 0.1);
+  border-radius: $radius-button;
+  display: inline-block;
+}
+
+.actionSection {
+  background-color: #FFF8E1;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  border-left: 6rpx solid $color-warning;
+}
+
+.actionLabel {
+  font-size: 26rpx;
+  color: $color-warning;
+  font-weight: $font-weight-semibold;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.actionText {
+  font-size: 30rpx;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+  font-weight: $font-weight-medium;
+}
+
+.contactSection {
+  background-color: #F6FFED;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  border-left: 6rpx solid $color-success;
+}
+
+.contactLabel {
+  font-size: 26rpx;
+  color: $color-success;
+  font-weight: $font-weight-semibold;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.contactText {
+  font-size: 30rpx;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+  font-weight: $font-weight-medium;
+}
+
+.photoSection {
+  margin: $spacing-md 0;
+}
+
+.photoLabel {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-md;
+}
+
+.photoBox {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+}
+
+.photoItem {
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyPhoto {
+  border: 3rpx dashed $color-border;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.photoPlus {
+  font-size: 64rpx;
+  color: $color-text-tertiary;
+}
+
+.photoImage {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+.noteSection {
+  margin: $spacing-lg 0;
+}
+
+.noteLabel {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.noteInput {
+  width: 100%;
+  min-height: 180rpx;
+  background-color: $color-bg-card;
+  border: 2rpx solid $color-border-light;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: 28rpx;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+  box-sizing: border-box;
+}
+
+.historySection {
+  margin-top: $spacing-xl;
+}
+
+.historyItem {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: flex-start;
+}
+
+.historyDot {
+  width: 16rpx;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background-color: rgba(245, 63, 63, 0.1);
+  margin-right: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.historyDotIcon {
+  font-size: 24rpx;
+}
+
+.historyContent {
+  flex: 1;
+}
+
+.historyTitle {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.historyTime {
+  font-size: 24rpx;
+  color: $color-text-tertiary;
+}
+
+.historyStatus {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-button;
+  margin-top: $spacing-xs;
+  display: inline-block;
+  background-color: rgba(0, 180, 42, 0.1);
+  color: $color-success;
+}
+
+.urgentTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, rgba(245, 63, 63, 0.1) 0%, rgba(245, 63, 63, 0.05) 100%);
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-lg;
+  border: 2rpx solid rgba(245, 63, 63, 0.3);
+}
+
+.urgentTipIcon {
+  font-size: 40rpx;
+  margin-right: $spacing-md;
+}
+
+.urgentTipText {
+  font-size: 28rpx;
+  color: $color-error;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-loose;
+}

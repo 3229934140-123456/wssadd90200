@@ -1,0 +1,76 @@
+@use '@/styles/variables.scss' as *;
+
+.bigBtn {
+  @include button-reset;
+  height: 112rpx;
+  border-radius: $radius-button;
+  padding: 0 $spacing-xl;
+  min-width: 240rpx;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.full {
+  width: 100%;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.primary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+
+  .icon, .text {
+    color: $color-text-white;
+  }
+}
+
+.success {
+  background: linear-gradient(135deg, $color-success 0%, #2DCB4A 100%);
+
+  .icon, .text {
+    color: $color-text-white;
+  }
+}
+
+.danger {
+  background: linear-gradient(135deg, $color-error 0%, #FF6B6B 100%);
+
+  .icon, .text {
+    color: $color-text-white;
+  }
+}
+
+.warning {
+  background: linear-gradient(135deg, $color-warning 0%, #FFA940 100%);
+
+  .icon, .text {
+    color: $color-text-white;
+  }
+}
+
+.default {
+  background-color: $color-bg-card;
+  border: 2rpx solid $color-border;
+
+  .icon, .text {
+    color: $color-text-primary;
+  }
+}
+
+.icon {
+  font-size: 40rpx;
+  margin-right: $spacing-sm;
+}
+
+.text {
+  font-size: 34rpx;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+}

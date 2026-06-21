@@ -1,0 +1,119 @@
+@use '@/styles/variables.scss' as *;
+
+.warnCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  border-left: 8rpx solid $color-error;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.92;
+    transform: scale(0.99);
+  }
+}
+
+.forbidCard {
+  border-left-color: $color-error;
+  background: linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 60%);
+}
+
+.cautionCard {
+  border-left-color: $color-warning;
+  background: linear-gradient(135deg, #FFF8EE 0%, #FFFFFF 60%);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.title {
+  font-size: 34rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.speakBtn {
+  display: flex;
+  align-items: center;
+  background-color: $color-primary;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-button;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.speakIcon {
+  font-size: 32rpx;
+  margin-right: $spacing-xs;
+}
+
+.speakText {
+  font-size: 26rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.foodList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.foodTag {
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+}
+
+.forbidTag {
+  background-color: rgba(245, 63, 63, 0.1);
+  border: 2rpx solid rgba(245, 63, 63, 0.3);
+}
+
+.cautionTag {
+  background-color: rgba(255, 125, 0, 0.1);
+  border: 2rpx solid rgba(255, 125, 0, 0.3);
+}
+
+.foodName {
+  font-size: 28rpx;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.forbidTag .foodName {
+  color: $color-text-error;
+}
+
+.cautionTag .foodName {
+  color: $color-text-warning;
+}
+
+.reasonBox {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  border: 2rpx solid $color-divider;
+}
+
+.reasonLabel {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.reasonText {
+  font-size: 28rpx;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+}

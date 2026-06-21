@@ -1,0 +1,41 @@
+// ============================================
+// 主题配色变量 - 中老年医美术后关怀App
+// ============================================
+
+// 品牌主题色：温暖粉色，医美关怀风格
+$color-primary: #FF6B9D;
+$color-primary-light: #FFA5C4;
+$color-primary-dark: #E85A8A;
+
+// 辅助色：健康蓝绿
+$color-secondary: #4ECDC4;
+$color-secondary-light: #7EDDD6;
+$color-secondary-dark: #3DBDB5;
+
+// 功能色（语义色，大字高对比）
+$color-success: #00B42A;       // 可以吃、正常
+$color-warning: #FF7D00;       // 暂缓、注意
+$color-error: #F53F3F;         // 不能吃、禁止、紧急
+$color-info: #165DFF;          // 咨询医生、信息
+
+// 背景色：温暖柔和
+$color-bg-page: #FFF5F7;       // 页面背景（淡粉）
+$color-bg-card: #FFFFFF;       // 卡片背景
+$color-bg-hover: #FFF0F3;      // 悬浮态
+$color-bg-warn: #FFF1F0;       // 警告区背景
+$color-bg-success: #F6FFED;    // 正常区背景
+
+// 文本色（高对比，适合老人）
+$color-text-primary: #1D2129;  // 主要文字（深黑，清晰）
+$color-text-secondary: #4E5969; // 次要文字
+$color-text-tertiary: #86909C; // 辅助文字
+$color-text-disabled: #C9CDD4; // 禁用文字
+$color-text-white: #FFFFFF;    // 白色文字
+$color-text-error: #F53F3F;    // 错误文字（红）
+$color-text-success: #00B42A;  // 正常文字（绿）
+$color-text-warning: #FF7D00;  // 警告文字（橙）
+
+// 边框色
+$color-border: #FFD6E0;        // 主题色边框
+$color-border-light: #F2F3F5;  // 浅灰边框
+$color-divider: #FFF0F3;       // 分割线

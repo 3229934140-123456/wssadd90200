@@ -1,0 +1,52 @@
+@use '@/styles/variables.scss' as *;
+
+.item {
+  display: flex;
+  align-items: center;
+  background-color: $color-bg-success;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+  border: 2rpx solid rgba(0, 180, 42, 0.2);
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.iconBox {
+  width: 96rpx;
+  height: 96rpx;
+  background-color: #FFFFFF;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-md;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.icon {
+  font-size: 52rpx;
+}
+
+.info {
+  flex: 1;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-success;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.benefit {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}

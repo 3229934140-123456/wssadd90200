@@ -1,0 +1,172 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: 80rpx;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-button;
+}
+
+.backText {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  margin-left: $spacing-xs;
+}
+
+.heroCard {
+  background: linear-gradient(135deg, $color-error 0%, lighten($color-error, 10%) 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  color: $color-text-white;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.heroIcon {
+  font-size: 80rpx;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.heroTitle {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.heroDate {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.infoCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.cardTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.stepsList {
+  padding-left: $spacing-sm;
+}
+
+.stepItem {
+  display: flex;
+  margin-bottom: $spacing-md;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.stepNum {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+  font-size: 24rpx;
+}
+
+.stepContent {
+  flex: 1;
+  padding-top: 4rpx;
+}
+
+.stepText {
+  font-size: 30rpx;
+  color: $color-text-primary;
+  display: block;
+  line-height: 1.6;
+}
+
+.timeNotice {
+  background-color: rgba(255, 125, 0, 0.1);
+  border: 2rpx solid rgba(255, 125, 0, 0.3);
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  margin-top: $spacing-md;
+}
+
+.timeText {
+  font-size: 28rpx;
+  color: $color-warning;
+  font-weight: $font-weight-semibold;
+  display: block;
+  line-height: 1.6;
+}
+
+.remarkCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.remarkLabel {
+  font-size: 28rpx;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.remarkContent {
+  font-size: 30rpx;
+  color: $color-text-primary;
+  line-height: 1.6;
+}
+
+.photosSection {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-lg;
+}
+
+.photosGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+}
+
+.photoItem {
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  background-color: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.photoText {
+  font-size: 24rpx;
+  color: $color-text-tertiary;
+}

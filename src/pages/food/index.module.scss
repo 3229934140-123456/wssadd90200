@@ -1,0 +1,297 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #E8F3FF 0%, $color-bg-page 20%);
+  padding: 0 $page-padding;
+  padding-bottom: 120rpx;
+}
+
+.searchSection {
+  padding-top: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.searchTitle {
+  font-size: 38rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.searchSubtitle {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  display: block;
+  margin-bottom: $spacing-lg;
+  line-height: $line-height-loose;
+}
+
+.searchBox {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.inputWrap {
+  flex: 1;
+  background-color: $color-bg-card;
+  border-radius: $radius-button;
+  padding: 0 $spacing-lg;
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: $shadow-card;
+  border: 2rpx solid $color-border-light;
+}
+
+.searchIcon {
+  font-size: 36rpx;
+  margin-right: $spacing-sm;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: 32rpx;
+  color: $color-text-primary;
+  height: 96rpx;
+}
+
+.searchBtn {
+  @include button-reset;
+  height: 96rpx;
+  padding: 0 $spacing-xl;
+  background: linear-gradient(135deg, $color-info 0%, #4080FF 100%);
+  border-radius: $radius-button;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.searchBtnText {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.voiceBtn {
+  @include button-reset;
+  width: 100%;
+  height: 128rpx;
+  background: linear-gradient(135deg, $color-secondary 0%, $color-secondary-light 100%);
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.voiceBtnIcon {
+  font-size: 56rpx;
+  margin-right: $spacing-md;
+}
+
+.voiceBtnText {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.voiceBtnSub {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
+  display: block;
+  text-align: center;
+  margin-top: $spacing-xs;
+}
+
+.hotSection {
+  margin-bottom: $spacing-lg;
+}
+
+.hotTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-md;
+}
+
+.hotList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.hotItem {
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-button;
+  border: 2rpx solid $color-border-light;
+  transition: all $transition-base;
+
+  &:active {
+    background-color: $color-bg-hover;
+    transform: scale(0.97);
+  }
+}
+
+.hotItemText {
+  font-size: 28rpx;
+  color: $color-text-primary;
+}
+
+.exampleBox {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-lg;
+  border-left: 8rpx solid $color-secondary;
+}
+
+.exampleTitle {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-secondary-dark;
+  display: block;
+  margin-bottom: $spacing-md;
+}
+
+.exampleList {
+  gap: $spacing-sm;
+}
+
+.exampleItem {
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.exampleText {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+}
+
+.exampleHighlight {
+  color: $color-info;
+  font-weight: $font-weight-semibold;
+}
+
+.resultSection {
+  margin-top: $spacing-lg;
+}
+
+.resultEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl * 2 $spacing-lg;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+}
+
+.emptyIcon {
+  font-size: 96rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: 30rpx;
+  color: $color-text-secondary;
+  text-align: center;
+  line-height: $line-height-loose;
+}
+
+.historySection {
+  margin-top: $spacing-lg;
+}
+
+.historyTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.historyTitleText {
+  font-size: 32rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.clearHistory {
+  font-size: 26rpx;
+  color: $color-text-tertiary;
+}
+
+.historyList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.historyItem {
+  padding: $spacing-sm $spacing-md;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: $radius-button;
+  border: 2rpx solid $color-divider;
+}
+
+.historyText {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+}
+
+.legendSection {
+  margin-top: $spacing-lg;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.legendTitle {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-md;
+}
+
+.legendList {
+  gap: $spacing-md;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+}
+
+.legendBadge {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: $radius-round;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.legendText {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+}

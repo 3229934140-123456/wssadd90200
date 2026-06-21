@@ -1,0 +1,323 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFE8EF 0%, $color-bg-page 25%);
+  padding: 0 $page-padding;
+  padding-bottom: 120rpx;
+}
+
+.profileCard {
+  margin-top: $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  color: $color-text-white;
+  margin-bottom: $spacing-lg;
+}
+
+.profileTop {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-round;
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-lg;
+  border: 4rpx solid rgba(255, 255, 255, 0.5);
+  font-size: 56rpx;
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.name {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.age {
+  font-size: 26rpx;
+  opacity: 0.9;
+  display: block;
+}
+
+.projectBadge {
+  margin-top: $spacing-sm;
+  display: inline-block;
+  padding: $spacing-xs $spacing-sm;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: $radius-button;
+  font-size: 24rpx;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailLabel {
+  font-size: 22rpx;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.detailValue {
+  font-size: 26rpx;
+  font-weight: $font-weight-medium;
+}
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.actionCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+  display: flex;
+  align-items: center;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.actionIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-md;
+  font-size: 40rpx;
+  flex-shrink: 0;
+}
+
+.actionIcon1 { background-color: rgba(255, 107, 157, 0.15); }
+.actionIcon2 { background-color: rgba(78, 205, 196, 0.15); }
+.actionIcon3 { background-color: rgba(255, 125, 0, 0.15); }
+.actionIcon4 { background-color: rgba(22, 93, 255, 0.15); }
+
+.actionInfo {
+  flex: 1;
+}
+
+.actionTitle {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.actionSubtitle {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: $spacing-lg 0 $spacing-md 0;
+}
+
+.titleText {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.sectionBadge {
+  font-size: 24rpx;
+  padding: $spacing-xs $spacing-sm;
+  background-color: rgba(255, 107, 157, 0.1);
+  border-radius: $radius-button;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.contactSection {
+  margin-bottom: $spacing-lg;
+}
+
+.contactCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.contactHeader {
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.contactStoreName {
+  font-size: 34rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.contactStoreAddr {
+  font-size: 24rpx;
+  color: $color-text-secondary;
+  display: block;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.contactInfo {
+  display: flex;
+  align-items: center;
+}
+
+.contactIcon {
+  font-size: 40rpx;
+  margin-right: $spacing-md;
+}
+
+.contactDetail {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactName {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.contactRole {
+  font-size: 24rpx;
+  color: $color-text-tertiary;
+}
+
+.contactBtn {
+  @include button-reset;
+  padding: $spacing-sm $spacing-md;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  min-width: 160rpx;
+
+  &:active { opacity: 0.85; }
+}
+
+.contactBtnText {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.photoSection {
+  margin-bottom: $spacing-md;
+}
+
+.photoLabel {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.photoBox {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-sm;
+}
+
+.photoItem {
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx dashed $color-border;
+  background-color: rgba(0, 0, 0, 0.02);
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.photoText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.photoIcon {
+  font-size: 40rpx;
+  margin-bottom: $spacing-xs;
+}
+
+.photoName {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+}
+
+.recordsEmpty {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: 64rpx 32rpx;
+  box-shadow: $shadow-card;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  display: block;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: 28rpx;
+  color: $color-text-tertiary;
+}
