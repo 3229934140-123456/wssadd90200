@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import { useAppContext } from '@/store/AppContext';
 import CareTaskItem from '@/components/CareTaskItem';
 import BigButton from '@/components/BigButton';
+import TimelineCard from '@/components/TimelineCard';
 import { mealVoiceReminders } from '@/data/mockData';
 import { formatDate, getDaysAfter, makePhoneCall, speakText, getTodayStr, addDays, getDateLabel } from '@/utils';
 import type { CareTask } from '@/types';
@@ -171,11 +172,26 @@ const FamilyPage: React.FC = () => {
         <View className={styles.planTipCard}>
           <Text className={styles.planTipTitle}>📋 护士制定的术后计划</Text>
           <Text className={styles.planTipText}>
-            {surgeryPlan.dailyCareFocus}
+            🌡️ {surgeryPlan.dailyCareFocus}
           </Text>
           {surgeryPlan.medicationPlan && (
-            <Text className={styles.planTipText} style={{ marginTop: 8, color: '#165DFF' }}>
+            <Text className={styles.planTipText} style={{ marginTop: 12, color: '#165DFF' }}>
               💊 {surgeryPlan.medicationPlan}
+            </Text>
+          )}
+          {(surgeryPlan.tabooNotes || surgeryPlan.forbiddenInstructions) && (
+            <Text className={styles.planTipText} style={{ marginTop: 12, color: '#F53F3F' }}>
+              ⚠️ {surgeryPlan.tabooNotes || surgeryPlan.forbiddenInstructions}
+            </Text>
+          )}
+          {surgeryPlan.stitchRemovalDate && (
+            <Text className={styles.planTipText} style={{ marginTop: 12, color: '#FF7D00' }}>
+              📅 拆线日期：{surgeryPlan.stitchRemovalDate}（{getDateLabel(surgeryPlan.stitchRemovalDate)}）
+            </Text>
+          )}
+          {surgeryPlan.followUpReminder && (
+            <Text className={styles.planTipText} style={{ marginTop: 12, color: '#4ECDC4' }}>
+              🔔 {surgeryPlan.followUpReminder}
             </Text>
           )}
         </View>
@@ -201,6 +217,11 @@ const FamilyPage: React.FC = () => {
           </View>
           <Text className={styles.followUpEntryArrow}>›</Text>
         </View>
+      )}
+
+      {/* 术后恢复时间线 */}
+      {activeRecord && (
+        <TimelineCard record={activeRecord} careHistory={careHistory} />
       )}
 
       {/* 照护日历 */}

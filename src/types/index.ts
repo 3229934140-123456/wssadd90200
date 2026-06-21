@@ -86,6 +86,9 @@ export interface AbnormalReport {
   createdAt?: number;
 }
 
+// 护士回访状态标记
+export type NurseNoteStatus = 'good' | 'caution' | 'visit';
+
 // 护士回访记录
 export interface NurseFollowUpNote {
   id: string;
@@ -95,6 +98,10 @@ export interface NurseFollowUpNote {
   nextNotes: string; // 下次注意事项(旧名，兼容)
   nextSteps: string; // 下次注意事项(新名，统一使用)
   createdAt: string;
+  // 扩展：状态标签
+  status?: NurseNoteStatus; // good=恢复良好, caution=需注意, visit=建议到院
+  // 扩展：支持追加图片（本地临时路径数组）
+  photos?: string[];
 }
 
 // 术后恢复计划（护士建档时填写）

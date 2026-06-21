@@ -6,16 +6,17 @@ import { useAppContext } from '@/store/AppContext';
 import WarnCard from '@/components/WarnCard';
 import RecommendCard from '@/components/RecommendCard';
 import BigButton from '@/components/BigButton';
+import TimelineCard from '@/components/TimelineCard';
 import {
   todayForbidList,
   todayCautionList,
   todayRecommendList,
   mealVoiceReminders
 } from '@/data/mockData';
-import { formatDate, getDaysAfter, speakText, makePhoneCall, getTodayStr } from '@/utils';
+import { formatDate, getDaysAfter, speakText, makePhoneCall, getTodayStr, buildMealVoiceText } from '@/utils';
 
 const HomePage: React.FC = () => {
-  const { userInfo, isProfileSetup, getActiveRecord } = useAppContext();
+  const { userInfo, isProfileSetup, getActiveRecord, careHistory } = useAppContext();
   const daysAfter = useMemo(() => getDaysAfter(userInfo.surgeryDate), [userInfo.surgeryDate]);
   const todayStr = getTodayStr();
 
@@ -48,7 +49,14 @@ const HomePage: React.FC = () => {
   };
 
   const handleMealVoice = (meal: 'breakfast' | 'lunch' | 'dinner') => {
-    const text = mealVoiceReminders[meal];
+    // 三餐语音联动术后计划：动态生成，含特殊忌口+用药提醒
+    const text = buildMealVoiceText(meal, {
+      projectName,
+      daysAfter,
+      surgeryPlan,
+      forbiddenFoods: activeRecord?.forbiddenFoods || activeRecord?.forbidFoods || [],
+      recommendedFoods: activeRecord?.recommendedFoods || activeRecord?.recommendFoods || [],
+    });
     speakText(text);
   };
 
@@ -162,6 +170,11 @@ const HomePage: React.FC = () => {
       </View>
 
       <View className={styles.content}>
+        {/* 术后恢复时间线 */}
+        {activeRecord && (
+          <TimelineCard record={activeRecord} careHistory={careHistory} />
+        )}
+
         <View className={styles.sectionTitle}>
           <Text className={styles.titleText}>🚫 今天不能吃什么</Text>
           <Text className={styles.titleBadge}>一定要记住！</Text>

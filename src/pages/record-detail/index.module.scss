@@ -408,3 +408,173 @@
   display: block;
   margin-bottom: $spacing-xs;
 }
+
+// 最新状态卡（顶部一眼可见）
+.latestStatusCard {
+  display: flex;
+  align-items: flex-start;
+  border-radius: $radius-lg;
+  border: 2rpx solid;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.latestStatusEmoji {
+  font-size: 48rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.latestStatusTitle {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.latestStatusSub {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.latestStatusDesc {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+// 状态选择器 Tabs
+.statusTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.statusTab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-sm;
+  border: 2rpx solid;
+  border-radius: $radius-md;
+  background-color: #F7F8FA;
+}
+
+.statusTabActive {
+  border-width: 3rpx;
+  font-weight: $font-weight-semibold;
+}
+
+.statusTabEmoji {
+  font-size: 32rpx;
+  margin-bottom: 4rpx;
+}
+
+.statusTabText {
+  font-size: 24rpx;
+  font-weight: $font-weight-medium;
+}
+
+// 照片墙
+.photoWall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.photoWallItem {
+  position: relative;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-md;
+  object-fit: cover;
+}
+
+.photoMock {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #E8F4FF 0%, #F0F5FF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid rgba(22, 93, 255, 0.1);
+  border-radius: $radius-md;
+}
+
+.photoMockIcon {
+  font-size: 48rpx;
+}
+
+.photoRemove {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  width: 36rpx;
+  height: 36rpx;
+  background-color: $color-error;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  z-index: 2;
+}
+
+.photoRemoveIcon {
+  font-size: 28rpx;
+  line-height: 1;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.photoAdd {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-md;
+  background-color: #F7F8FA;
+  border: 2rpx dashed $color-border;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoAddIcon {
+  font-size: 48rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+}
+
+.photoAddText {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+// 回访记录内嵌照片网格
+.notePhotos {
+  display: flex;
+  gap: $spacing-sm;
+  margin: $spacing-sm 0;
+  flex-wrap: wrap;
+}
+
+.notePhotoItem {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-md;
+  overflow: hidden;
+  flex-shrink: 0;
+}
