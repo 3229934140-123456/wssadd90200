@@ -181,6 +181,28 @@ const FamilyPage: React.FC = () => {
         </View>
       )}
 
+      {/* 复诊记录和护士回访入口 */}
+      {activeRecord && (
+        <View className={styles.followUpEntryCard} onClick={() => {
+          Taro.navigateTo({ url: `/pages/record-detail/index?id=${activeRecord.id}` });
+        }}>
+          <View style={{ flex: 1 }}>
+            <Text className={styles.followUpEntryTitle}>📝 复诊记录与护士回访</Text>
+            <Text className={styles.followUpEntrySub}>
+              {activeRecord.nextFollowUp
+                ? `下次复诊：${activeRecord.nextFollowUp} · ${getDateLabel(activeRecord.nextFollowUp)}`
+                : '查看恢复情况和护士建议'}
+            </Text>
+            {activeRecord.nurseNotes && activeRecord.nurseNotes.length > 0 && (
+              <Text className={styles.followUpEntryNote}>
+                💬 已有 {activeRecord.nurseNotes.length} 条护士回访记录
+              </Text>
+            )}
+          </View>
+          <Text className={styles.followUpEntryArrow}>›</Text>
+        </View>
+      )}
+
       {/* 照护日历 */}
       <View className={styles.calendarSection}>
         <View className={styles.sectionTitle}>

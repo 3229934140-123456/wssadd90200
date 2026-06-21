@@ -92,7 +92,8 @@ export interface NurseFollowUpNote {
   date: string; // 回访日期
   nurseName: string;
   recoveryStatus: string; // 恢复情况
-  nextNotes: string; // 下次注意事项
+  nextNotes: string; // 下次注意事项(旧名，兼容)
+  nextSteps: string; // 下次注意事项(新名，统一使用)
   createdAt: string;
 }
 
@@ -100,7 +101,8 @@ export interface NurseFollowUpNote {
 export interface SurgeryPlan {
   stitchRemovalDate?: string; // 拆线日期
   dailyCareFocus: string; // 每天护理重点
-  forbiddenInstructions: string; // 禁忌说明
+  forbiddenInstructions: string; // 禁忌说明(内部名)
+  tabooNotes: string; // 禁忌说明(页面展示名，和forbiddenInstructions保持同步)
   followUpReminder: string; // 复诊提醒
   medicationPlan?: string; // 用药计划
 }
@@ -108,13 +110,21 @@ export interface SurgeryPlan {
 // 复诊记录
 export interface RecordItem {
   id: string;
-  projectName: string;
-  surgeryDate: string;
-  doctorName: string;
+  // 基础信息 - 两套字段名共存(Context内部写旧名,页面读新名)
+  projectName: string; // 项目名(内部名)
+  project?: string; // 项目名(页面读，值=projectName)
+  surgeryDate: string; // 手术日期
+  doctorName: string; // 操作护士(内部名)
+  operator?: string; // 操作护士(页面读，值=doctorName)
+  familyContact?: string; // 家属联系人(页面读)
+  familyPhone?: string; // 家属联系电话
   nextFollowUp?: string;
   notes: string; // 医生叮嘱/术后计划
-  forbidFoods: string[];
-  recommendFoods: string[];
+  // 饮食 - 两套字段名
+  forbidFoods: string[]; // 忌口(内部名)
+  forbiddenFoods?: string[]; // 忌口(页面读，值=forbidFoods)
+  recommendFoods: string[]; // 推荐(内部名)
+  recommendedFoods?: string[]; // 推荐(页面读，值=recommendFoods)
   // 新增字段：更完整的术后计划
   surgeryPlan?: SurgeryPlan;
   // 新增字段：护士回访记录（可以有多次）

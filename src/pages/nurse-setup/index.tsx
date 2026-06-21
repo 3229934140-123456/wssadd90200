@@ -123,6 +123,7 @@ const NurseSetupPage: React.FC = () => {
             stitchRemovalDate: stitchRemovalDate || undefined,
             dailyCareFocus: dailyCareFocus.trim(),
             forbiddenInstructions: forbiddenInstructions.trim(),
+            tabooNotes: forbiddenInstructions.trim(),
             followUpReminder: followUpReminder.trim(),
             medicationPlan: medicationPlan.trim() || undefined
           };

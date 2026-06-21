@@ -33,6 +33,7 @@ interface AppContextType extends AppState {
   // 复诊记录
   addRecord: (record: RecordItem) => void;
   updateRecord: (id: string, update: Partial<RecordItem>) => void;
+  updateRecordNextFollowUp: (id: string, nextDate: string) => void;
   setActiveRecord: (id: string) => void;
   getActiveRecord: () => RecordItem | null;
 
@@ -84,6 +85,45 @@ const makeTodayEntry = (date: string): DailyCareEntry => ({
   updatedAt: new Date().toLocaleString('zh-CN')
 });
 
+// ========== RecordItem 规范化：确保两套字段名始终一致 ==========
+const normalizeRecord = (r: RecordItem): RecordItem => {
+  const project = r.project || r.projectName;
+  const operator = r.operator || r.doctorName;
+  const forbidFoods = (r.forbidFoods && r.forbidFoods.length > 0) ? r.forbidFoods : (r.forbiddenFoods || []);
+  const recommendFoods = (r.recommendFoods && r.recommendFoods.length > 0) ? r.recommendFoods : (r.recommendedFoods || []);
+  let surgeryPlan = r.surgeryPlan;
+  if (surgeryPlan) {
+    surgeryPlan = {
+      ...surgeryPlan,
+      dailyCareFocus: surgeryPlan.dailyCareFocus || '',
+      forbiddenInstructions: surgeryPlan.forbiddenInstructions || surgeryPlan.tabooNotes || '',
+      tabooNotes: surgeryPlan.tabooNotes || surgeryPlan.forbiddenInstructions || '',
+      followUpReminder: surgeryPlan.followUpReminder || '',
+    };
+  }
+  let nurseNotes = r.nurseNotes;
+  if (nurseNotes && nurseNotes.length > 0) {
+    nurseNotes = nurseNotes.map((n) => ({
+      ...n,
+      nextNotes: n.nextNotes || n.nextSteps || '',
+      nextSteps: n.nextSteps || n.nextNotes || '',
+    }));
+  }
+  return {
+    ...r,
+    project,
+    projectName: project,
+    operator,
+    doctorName: operator,
+    forbidFoods,
+    forbiddenFoods: forbidFoods,
+    recommendFoods,
+    recommendedFoods: recommendFoods,
+    surgeryPlan,
+    nurseNotes,
+  };
+};
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -92,10 +132,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     loadFromStorage(STORAGE_KEYS.CARE_HISTORY, demoDailyCareHistory)
   );
   const [reports, setReports] = useState<AbnormalReport[]>(loadFromStorage(STORAGE_KEYS.REPORTS, mockReports));
-  const [records, setRecords] = useState<RecordItem[]>(loadFromStorage(STORAGE_KEYS.RECORDS, mockRecords));
+  const rawRecords = loadFromStorage<RecordItem[]>(STORAGE_KEYS.RECORDS, mockRecords);
+  const [records, setRecords] = useState<RecordItem[]>(rawRecords.map(normalizeRecord));
   const [isProfileSetup, setIsProfileSetup] = useState<boolean>(loadFromStorage(STORAGE_KEYS.IS_SETUP, false));
   const [activeRecordId, setActiveRecordId] = useState<string | null>(
-    loadFromStorage<string | null>(STORAGE_KEYS.ACTIVE_RECORD, null) || mockRecords.find((r) => r.isActive)?.id || null
+    loadFromStorage<string | null>(STORAGE_KEYS.ACTIVE_RECORD, null) || records.find((r) => r.isActive)?.id || null
   );
 
   // 今天的careTasks是careHistory的派生
@@ -181,32 +222,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newPlan: SurgeryPlan = {
       stitchRemovalDate: stitchDate,
       dailyCareFocus: plan?.dailyCareFocus || defaultSurgeryPlan.dailyCareFocus,
-      forbiddenInstructions: plan?.forbiddenInstructions || defaultSurgeryPlan.forbiddenInstructions,
+      forbiddenInstructions: plan?.forbiddenInstructions || plan?.tabooNotes || defaultSurgeryPlan.forbiddenInstructions,
+      tabooNotes: plan?.tabooNotes || plan?.forbiddenInstructions || defaultSurgeryPlan.forbiddenInstructions,
       followUpReminder: plan?.followUpReminder || defaultSurgeryPlan.followUpReminder,
       medicationPlan: plan?.medicationPlan || defaultSurgeryPlan.medicationPlan
     };
 
     const notesText = `${info.projectName}术后恢复计划。${newPlan.dailyCareFocus}`;
+    const forbidFoodsArr = ['辛辣', '酒精', '海鲜'];
+    const recommendFoodsArr = ['鸡蛋', '牛奶', '瘦肉', '蔬菜', '水果'];
+    const familyContactText = info.familyName ? `${info.familyName}${info.familyPhone ? ' · ' + info.familyPhone : ''}` : '';
 
-    const newRecord: RecordItem = {
+    const newRecord: RecordItem = normalizeRecord({
       id: Date.now().toString(),
       projectName: info.projectName,
+      project: info.projectName,
       surgeryDate: info.surgeryDate,
       doctorName: info.nurseName,
+      operator: info.nurseName,
+      familyContact: familyContactText,
+      familyPhone: info.familyPhone,
       nextFollowUp,
       notes: notesText,
-      forbidFoods: plan?.forbiddenInstructions
-        ? ['辛辣', '酒精', '海鲜']
-        : ['辛辣', '酒精', '海鲜'],
-      recommendFoods: ['鸡蛋', '牛奶', '瘦肉', '蔬菜', '水果'],
+      forbidFoods: forbidFoodsArr,
+      forbiddenFoods: forbidFoodsArr,
+      recommendFoods: recommendFoodsArr,
+      recommendedFoods: recommendFoodsArr,
       surgeryPlan: newPlan,
       nurseNotes: [],
       isActive: true
-    };
+    });
 
     setRecords((prev) => {
       // 旧活跃记录取消活跃
-      const others = prev.map((r) => ({ ...r, isActive: false }));
+      const others = prev.map((r) => ({ ...normalizeRecord(r), isActive: false }));
       return [newRecord, ...others];
     });
     setActiveRecordId(newRecord.id);
@@ -218,27 +267,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const addRecord = useCallback((record: RecordItem) => {
-    setRecords((prev) => [record, ...prev]);
+    setRecords((prev) => [normalizeRecord(record), ...prev]);
   }, []);
 
   const updateRecord = useCallback((id: string, update: Partial<RecordItem>) => {
     setRecords((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, ...update } : r))
+      prev.map((r) => (r.id === id ? normalizeRecord({ ...r, ...update }) : normalizeRecord(r)))
     );
   }, []);
 
+  const updateRecordNextFollowUp = useCallback((id: string, nextDate: string) => {
+    setRecords((prev) =>
+      prev.map((r) => (r.id === id ? normalizeRecord({ ...r, nextFollowUp: nextDate }) : normalizeRecord(r)))
+    );
+    // 如果是活跃计划，也同步到userInfo(不强制新增字段)
+    const active = records.find((r) => r.id === id);
+    if (active && (active.isActive || id === activeRecordId)) {
+      // 不破坏UserInfo类型一致性，只通过records记录
+      console.log('[复诊日期更新]', id, '->', nextDate);
+    }
+  }, [records, activeRecordId]);
+
   const setActiveRecord = useCallback((id: string) => {
     setRecords((prev) =>
-      prev.map((r) => ({ ...r, isActive: r.id === id }))
+      prev.map((r) => normalizeRecord({ ...r, isActive: r.id === id }))
     );
     setActiveRecordId(id);
     const record = records.find((r) => r.id === id);
     if (record) {
+      const norm = normalizeRecord(record);
       setUserInfo((prev) => ({
         ...prev,
-        projectName: record.projectName,
-        surgeryDate: record.surgeryDate,
-        nurseName: record.doctorName,
+        projectName: norm.projectName,
+        surgeryDate: norm.surgeryDate,
+        nurseName: norm.doctorName,
         activePlanId: id
       }));
     }
@@ -247,9 +309,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const getActiveRecord = useCallback((): RecordItem | null => {
     if (activeRecordId) {
       const r = records.find((x) => x.id === activeRecordId);
-      if (r) return r;
+      if (r) return normalizeRecord(r);
     }
-    return records.find((r) => r.isActive) || records[0] || null;
+    const active = records.find((r) => r.isActive);
+    if (active) return normalizeRecord(active);
+    if (records.length > 0) return normalizeRecord(records[0]);
+    return null;
   }, [activeRecordId, records]);
 
   const updateSurgeryPlan = useCallback((plan: Partial<SurgeryPlan>) => {
@@ -257,21 +322,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!record) return;
     const merged: SurgeryPlan = {
       ...(record.surgeryPlan || defaultSurgeryPlan),
-      ...plan
+      ...plan,
+      // 确保两套禁忌说明字段同步
+      forbiddenInstructions: plan.forbiddenInstructions || plan.tabooNotes || (record.surgeryPlan?.forbiddenInstructions ?? ''),
+      tabooNotes: plan.tabooNotes || plan.forbiddenInstructions || (record.surgeryPlan?.tabooNotes ?? ''),
     };
     updateRecord(record.id, { surgeryPlan: merged });
   }, [getActiveRecord, updateRecord]);
 
-  const addNurseNote = useCallback((recordId: string, note: Omit<NurseFollowUpNote, 'id' | 'createdAt'>) => {
+  const addNurseNote = useCallback((recordId: string, note: Partial<NurseFollowUpNote>) => {
     setRecords((prev) =>
       prev.map((r) => {
-        if (r.id !== recordId) return r;
+        if (r.id !== recordId) return normalizeRecord(r);
         const newNote: NurseFollowUpNote = {
-          ...note,
           id: 'n' + Date.now(),
-          createdAt: new Date().toLocaleString('zh-CN')
+          date: note.date || new Date().toISOString().slice(0, 10),
+          nurseName: note.nurseName || '护士',
+          recoveryStatus: note.recoveryStatus || '',
+          nextNotes: note.nextSteps || note.nextNotes || '',
+          nextSteps: note.nextSteps || note.nextNotes || '',
+          createdAt: note.createdAt || new Date().toLocaleString('zh-CN'),
         };
-        return { ...r, nurseNotes: [newNote, ...(r.nurseNotes || [])] };
+        return normalizeRecord({ ...r, nurseNotes: [newNote, ...(r.nurseNotes || [])] });
       })
     );
   }, []);
@@ -279,11 +351,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateNurseNote = useCallback((recordId: string, noteId: string, update: Partial<NurseFollowUpNote>) => {
     setRecords((prev) =>
       prev.map((r) => {
-        if (r.id !== recordId) return r;
-        return {
+        if (r.id !== recordId) return normalizeRecord(r);
+        return normalizeRecord({
           ...r,
-          nurseNotes: (r.nurseNotes || []).map((n) => (n.id === noteId ? { ...n, ...update } : n))
-        };
+          nurseNotes: (r.nurseNotes || []).map((n) => (n.id === noteId
+            ? {
+                ...n,
+                ...update,
+                nextNotes: update.nextSteps || update.nextNotes || n.nextNotes || n.nextSteps || '',
+                nextSteps: update.nextSteps || update.nextNotes || n.nextSteps || n.nextNotes || '',
+              }
+            : n)),
+        });
       })
     );
   }, []);
@@ -292,7 +371,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUserInfo(mockUserInfo);
     setCareHistory(demoDailyCareHistory);
     setReports(mockReports);
-    setRecords(mockRecords);
+    setRecords(mockRecords.map(normalizeRecord));
     setIsProfileSetup(false);
     const active = mockRecords.find((r) => r.isActive);
     setActiveRecordId(active?.id || null);
@@ -321,6 +400,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       saveProfile,
       addRecord,
       updateRecord,
+      updateRecordNextFollowUp,
       setActiveRecord,
       getActiveRecord,
       updateSurgeryPlan,
@@ -332,7 +412,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       userInfo, careTasks, careHistory, reports, records, isProfileSetup, activeRecordId,
       toggleCareTask, toggleCareTaskOnDate, resetCareTasks, resetCareTasksOnDate,
       getCareTasksForDate, updateCareNote, addReport, updateUserInfo, saveProfile,
-      addRecord, updateRecord, setActiveRecord, getActiveRecord, updateSurgeryPlan,
+      addRecord, updateRecord, updateRecordNextFollowUp, setActiveRecord, getActiveRecord, updateSurgeryPlan,
       addNurseNote, updateNurseNote, resetAllData
     ]
   );
