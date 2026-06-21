@@ -5,6 +5,8 @@ export default defineAppConfig({
     'pages/family/index',
     'pages/abnormal/index',
     'pages/mine/index',
+    'pages/nurse-setup/index',
+    'pages/record-detail/index',
     'pages/abnormal-detail/index',
     'pages/food-detail/index'
   ],

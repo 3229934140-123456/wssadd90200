@@ -5,12 +5,11 @@ import styles from './index.module.scss';
 import { useAppContext } from '@/store/AppContext';
 import BigButton from '@/components/BigButton';
 import RecordCard from '@/components/RecordCard';
-import { historyRecords } from '@/data/mockData';
 import { formatDate, getDaysAfter, makePhoneCall } from '@/utils';
 import classnames from 'classnames';
 
 const MinePage: React.FC = () => {
-  const { userInfo } = useAppContext();
+  const { userInfo, records, isProfileSetup, resetAllData } = useAppContext();
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const daysAfter = getDaysAfter(userInfo.surgeryDate);
 
@@ -62,12 +61,11 @@ const MinePage: React.FC = () => {
   };
 
   const handleShowDetail = (recordId: string) => {
-    Taro.showModal({
-      title: '复诊详情',
-      content: '功能开发中，后续可查看完整的复诊记录和医生叮嘱',
-      showCancel: false
-    });
-    console.log('[我的] 查看复诊记录:', recordId);
+    Taro.navigateTo({ url: `/pages/record-detail/index?id=${recordId}` });
+  };
+
+  const handleGoSetup = () => {
+    Taro.navigateTo({ url: '/pages/nurse-setup/index' });
   };
 
   return (
@@ -227,10 +225,10 @@ const MinePage: React.FC = () => {
 
       <View className={styles.sectionTitle}>
         <Text className={styles.titleText}>📜 复诊记录</Text>
-        <Text className={styles.sectionBadge}>共 {historyRecords.length} 条</Text>
+        <Text className={styles.sectionBadge}>共 {records.length} 条</Text>
       </View>
 
-      {historyRecords.length === 0 ? (
+      {records.length === 0 ? (
         <View className={styles.recordsEmpty}>
           <Text className={styles.emptyIcon}>📋</Text>
           <Text className={styles.emptyText}>
@@ -239,7 +237,7 @@ const MinePage: React.FC = () => {
           </Text>
         </View>
       ) : (
-        historyRecords.map((record) => (
+        records.map((record) => (
           <RecordCard
             key={record.id}
             data={record}
@@ -250,6 +248,8 @@ const MinePage: React.FC = () => {
 
       <View style={{ height: 40 }} />
       <BigButton text="返回今日提醒首页" icon="🏠" type="default" onClick={() => handleNavigate('home')} />
+      <View style={{ height: 16 }} />
+      <BigButton text="👩‍⚕️ 护士建档管理" icon="📋" type="default" onClick={handleGoSetup} />
       <View style={{ height: 40 }} />
     </ScrollView>
   );

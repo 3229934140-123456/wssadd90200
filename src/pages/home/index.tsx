@@ -16,9 +16,14 @@ import {
 import { formatDate, getDaysAfter, speakText, makePhoneCall, getTodayStr } from '@/utils';
 
 const HomePage: React.FC = () => {
-  const { userInfo } = useAppContext();
+  const { userInfo, isProfileSetup, records } = useAppContext();
   const daysAfter = useMemo(() => getDaysAfter(userInfo.surgeryDate), [userInfo.surgeryDate]);
   const todayStr = getTodayStr();
+
+  const latestRecord = records[0];
+  const followUp = latestRecord?.nextFollowUp
+    ? { hasAppointment: true, date: latestRecord.nextFollowUp, time: '按预约时间', note: '请提前10分钟到院', projectName: latestRecord.projectName, daysAfter }
+    : defaultFollowUp;
 
   const getGreeting = (): string => {
     const hour = new Date().getHours();
@@ -46,6 +51,10 @@ const HomePage: React.FC = () => {
 
   const handleCallNurse = () => {
     makePhoneCall(userInfo.nursePhone);
+  };
+
+  const handleGoSetup = () => {
+    Taro.navigateTo({ url: '/pages/nurse-setup/index' });
   };
 
   const handleRefresh = () => {
@@ -101,6 +110,17 @@ const HomePage: React.FC = () => {
             <Text className={styles.voiceBtnText}>晚饭前提醒</Text>
           </View>
         </View>
+
+        {!isProfileSetup && (
+          <View style={{ marginTop: 16 }}>
+            <BigButton text="👩‍⚕️ 护士建档（首次使用请点这里）" icon="📋" type="warning" onClick={handleGoSetup} />
+          </View>
+        )}
+        {isProfileSetup && (
+          <View style={{ marginTop: 16 }}>
+            <BigButton text="修改建档信息" icon="✏️" type="default" onClick={handleGoSetup} />
+          </View>
+        )}
       </View>
 
       <View className={styles.content}>

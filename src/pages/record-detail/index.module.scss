@@ -1,0 +1,221 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: 120rpx;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-button;
+}
+
+.backText {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  margin-left: $spacing-xs;
+}
+
+.heroCard {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  color: $color-text-white;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.heroIcon {
+  font-size: 64rpx;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.heroTitle {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.heroDate {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.heroInfo {
+  font-size: 26rpx;
+  opacity: 0.85;
+  line-height: 1.8;
+  margin-top: $spacing-sm;
+}
+
+.sectionCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.cardTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.notesText {
+  font-size: 30rpx;
+  color: $color-text-primary;
+  line-height: 1.8;
+}
+
+.forbidSection {
+  margin-bottom: $spacing-lg;
+}
+
+.forbidTitle {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.forbidTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.forbidTag {
+  padding: $spacing-xs $spacing-md;
+  background-color: rgba(245, 63, 63, 0.1);
+  border-radius: $radius-button;
+  font-size: 26rpx;
+  color: $color-error;
+  font-weight: $font-weight-medium;
+}
+
+.recommendSection {
+  margin-bottom: $spacing-lg;
+}
+
+.recommendTitle {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-success;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.recommendTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.recommendTag {
+  padding: $spacing-xs $spacing-md;
+  background-color: rgba(0, 180, 42, 0.1);
+  border-radius: $radius-button;
+  font-size: 26rpx;
+  color: $color-success;
+  font-weight: $font-weight-medium;
+}
+
+.followUpCard {
+  background-color: rgba(255, 125, 0, 0.08);
+  border: 2rpx solid rgba(255, 125, 0, 0.3);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.followUpLabel {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-warning;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.followUpDate {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.followUpNote {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.noFollowUp {
+  background-color: rgba(0, 180, 42, 0.08);
+  border: 2rpx solid rgba(0, 180, 42, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  text-align: center;
+}
+
+.noFollowUpText {
+  font-size: 28rpx;
+  color: $color-success;
+}
+
+.editSection {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.editLabel {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.editInput {
+  width: 100%;
+  height: 80rpx;
+  background-color: #F7F8FA;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: 28rpx;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  margin-bottom: $spacing-md;
+}
+
+.editTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  background-color: #F7F8FA;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: 28rpx;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  margin-bottom: $spacing-md;
+}

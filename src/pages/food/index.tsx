@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Input, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
@@ -9,12 +9,49 @@ import { getStatusText, speakText } from '@/utils';
 
 const hotFoods = ['羊肉', '牛肉', '辣椒', '白酒', '鸡蛋', '牛奶', '虾', '大闸蟹', '人参', '阿胶'];
 
+const cleanFoodQuery = (raw: string): string => {
+  return raw
+    .replace(/能不能吃|能不能喝|可以吃吗|可以喝吗|能吃吗|能喝吗|能不能|可以吗|行不行|[？?。！!，,吗呢吧啊呀哦嘛]/g, '')
+    .trim();
+};
+
+const searchFood = (query: string): FoodItem | null => {
+  const cleaned = cleanFoodQuery(query);
+  if (!cleaned) return null;
+
+  let result = foodDatabase.find((item) => item.name === cleaned);
+  if (result) return result;
+
+  result = foodDatabase.find((item) => cleaned.includes(item.name));
+  if (result) return result;
+
+  result = foodDatabase.find((item) => item.name.includes(cleaned));
+  if (result) return result;
+
+  const aliases: Record<string, string> = {
+    '辣': '辣椒', '辣的': '辣椒', '辛辣': '辣椒',
+    '酒': '白酒', '喝酒': '白酒', '红酒': '白酒', '黄酒': '白酒', '酒精': '白酒',
+    '海鲜': '虾', '螃蟹': '大闸蟹', '蟹': '大闸蟹', '贝类': '虾',
+    '牛': '牛肉', '猪': '鸡胸肉', '鸡': '鸡胸肉', '鸡肉': '鸡胸肉',
+    '蔬菜': '菠菜', '水果': '苹果', '补品': '人参',
+    '火锅': '麻辣火锅',
+  };
+  const aliasTarget = aliases[cleaned];
+  if (aliasTarget) {
+    result = foodDatabase.find((item) => item.name === aliasTarget);
+    if (result) return result;
+  }
+
+  return null;
+};
+
 const FoodPage: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [searchResult, setSearchResult] = useState<FoodItem | null>(null);
   const [searched, setSearched] = useState(false);
   const [history, setHistory] = useState<string[]>(['羊肉', '辣椒', '鸡蛋']);
   const [isRecording, setIsRecording] = useState(false);
+  const [voiceError, setVoiceError] = useState('');
 
   const handleSearch = (keyword: string = searchText) => {
     const query = keyword.trim();
@@ -22,31 +59,26 @@ const FoodPage: React.FC = () => {
       Taro.showToast({ title: '请输入食物名称', icon: 'none' });
       return;
     }
-    console.log('[查食物] 查询:', query);
     setSearched(true);
+    setVoiceError('');
 
-    const cleanQuery = query.replace(/能不能吃|能不能喝|可以吃吗|可以喝吗|能吃吗|能喝吗|[？?]/g, '').trim();
-
-    const result = foodDatabase.find(
-      (item) =>
-        item.name === cleanQuery ||
-        cleanQuery.includes(item.name) ||
-        item.name.includes(cleanQuery)
-    );
+    const result = searchFood(query);
 
     if (result) {
       setSearchResult(result);
-      if (!history.includes(cleanQuery)) {
-        setHistory((prev) => [cleanQuery, ...prev].slice(0, 10));
+      const displayQuery = cleanFoodQuery(query) || query;
+      if (!history.includes(displayQuery)) {
+        setHistory((prev) => [displayQuery, ...prev].slice(0, 10));
       }
-      const resultText = `${result.name}，${getStatusText(result.status)}。${result.reason}`;
+      const resultText = `${result.name}，${getStatusText(result.status)}。${result.reason}。${result.suggestion}`;
       speakText(resultText);
     } else {
+      const displayQuery = cleanFoodQuery(query) || query;
       setSearchResult({
         id: 'unknown',
-        name: cleanQuery,
+        name: displayQuery,
         status: 'consult',
-        reason: `暂时没有"${cleanQuery}"的记录，为了您的安全，`,
+        reason: `暂时没有"${displayQuery}"的饮食记录，为了您的安全，`,
         suggestion: '建议咨询您的护士或医生，确认后再食用',
         category: '未知'
       });
@@ -54,19 +86,100 @@ const FoodPage: React.FC = () => {
   };
 
   const handleVoiceInput = () => {
+    if (isRecording) return;
     setIsRecording(true);
-    Taro.showLoading({ title: '正在听...' });
-    console.log('[语音输入] 启动录音');
+    setVoiceError('');
 
-    setTimeout(() => {
-      const mockResults = ['羊肉能不能吃', '牛肉可以吃吗', '辣椒能吃吗', '鸡蛋能吃吗', '白酒可以喝吗'];
-      const randomQuery = mockResults[Math.floor(Math.random() * mockResults.length)];
-      setSearchText(randomQuery);
-      setIsRecording(false);
-      Taro.hideLoading();
-      Taro.showToast({ title: '识别成功', icon: 'success' });
-      setTimeout(() => handleSearch(randomQuery), 500);
-    }, 1500);
+    const plugin = Taro.requirePlugin('WechatSI');
+    if (plugin) {
+      const manager = plugin.getRecordRecognitionManager();
+      manager.onRecognize((res: any) => {
+        const text = res?.result || '';
+        if (text) {
+          setSearchText(text);
+        }
+      });
+      manager.onStop((res: any) => {
+        setIsRecording(false);
+        Taro.hideLoading();
+        const text = res?.result || '';
+        if (text.trim()) {
+          setSearchText(text.trim());
+          Taro.showToast({ title: '识别成功', icon: 'success' });
+          setTimeout(() => handleSearch(text.trim()), 500);
+        } else {
+          setVoiceError('没有听清您说的话，请再试一次，或者手动输入食物名称');
+          Taro.showToast({ title: '未识别到内容，请重试', icon: 'none', duration: 2500 });
+        }
+      });
+      manager.onError((err: any) => {
+        setIsRecording(false);
+        Taro.hideLoading();
+        console.error('[语音识别失败]', err);
+        setVoiceError('语音识别失败，请再试一次，或者手动输入食物名称');
+        Taro.showToast({ title: '识别失败，请重试或手动输入', icon: 'none', duration: 2500 });
+      });
+      Taro.showLoading({ title: '正在听您说话...' });
+      manager.start({ lang: 'zh_CN' });
+      setTimeout(() => {
+        if (isRecording) {
+          manager.stop();
+        }
+      }, 6000);
+    } else {
+      Taro.showModal({
+        title: '语音识别',
+        content: '当前环境不支持语音识别插件，是否使用微信原生录音？',
+        success: (modalRes) => {
+          if (modalRes.confirm) {
+            fallbackVoiceInput();
+          } else {
+            setIsRecording(false);
+            setVoiceError('语音识别不可用，请手动输入食物名称');
+          }
+        }
+      });
+    }
+  };
+
+  const fallbackVoiceInput = () => {
+    Taro.startRecord({
+      success: () => {
+        setIsRecording(false);
+        Taro.hideLoading();
+        Taro.showModal({
+          title: '语音输入',
+          editable: true,
+          placeholderText: '请输入您想问的食物，如：羊肉能不能吃',
+          success: (res) => {
+            if (res.content && res.content.trim()) {
+              const text = res.content.trim();
+              setSearchText(text);
+              Taro.showToast({ title: '已收到', icon: 'success' });
+              setTimeout(() => handleSearch(text), 500);
+            } else {
+              setVoiceError('未输入内容，请再试一次');
+              Taro.showToast({ title: '未输入内容', icon: 'none' });
+            }
+          }
+        });
+      },
+      fail: () => {
+        setIsRecording(false);
+        Taro.hideLoading();
+        setVoiceError('录音失败，请手动输入食物名称');
+        Taro.showToast({ title: '录音失败，请手动输入', icon: 'none' });
+      },
+      complete: () => {
+        Taro.stopRecord();
+      }
+    });
+  };
+
+  const handleStopVoice = () => {
+    setIsRecording(false);
+    Taro.hideLoading();
+    Taro.stopRecord();
   };
 
   const handleHotClick = (food: string) => {
@@ -113,15 +226,30 @@ const FoodPage: React.FC = () => {
           </View>
         </View>
 
-        <View className={styles.voiceBtn} onClick={handleVoiceInput}>
+        <View
+          className={styles.voiceBtn}
+          onClick={isRecording ? handleStopVoice : handleVoiceInput}
+        >
           <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Text className={styles.voiceBtnIcon}>{isRecording ? '🎙️' : '🎤'}</Text>
             <Text className={styles.voiceBtnText}>
-              {isRecording ? '正在听您说话...' : '按住说话，问食物能不能吃'}
+              {isRecording ? '正在听您说话...点击结束' : '按住说话，问食物能不能吃'}
             </Text>
           </View>
-          <Text className={styles.voiceBtnSub}>比如问：羊肉能不能吃？</Text>
+          <Text className={styles.voiceBtnSub}>比如问：羊肉能不能吃？白酒能不能喝？</Text>
         </View>
+
+        {voiceError && (
+          <View style={{
+            marginTop: 16,
+            padding: '20rpx 24rpx',
+            backgroundColor: '#FFF7E8',
+            borderRadius: 12,
+            border: '2rpx solid #FF7D00'
+          }}>
+            <Text style={{ fontSize: 26, color: '#FF7D00', lineHeight: 1.6 }}>⚠️ {voiceError}</Text>
+          </View>
+        )}
       </View>
 
       <View className={styles.exampleBox}>
@@ -134,12 +262,12 @@ const FoodPage: React.FC = () => {
           </View>
           <View className={styles.exampleItem}>
             <Text className={styles.exampleText}>
-              · <Text className={styles.exampleHighlight}>辣椒可以吃吗？</Text>
+              · <Text className={styles.exampleHighlight}>白酒能不能喝？</Text>
             </Text>
           </View>
           <View className={styles.exampleItem}>
             <Text className={styles.exampleText}>
-              · <Text className={styles.exampleHighlight}>白酒能喝吗？</Text>
+              · <Text className={styles.exampleHighlight}>辣椒可以吃吗？</Text>
             </Text>
           </View>
           <View className={styles.exampleItem}>

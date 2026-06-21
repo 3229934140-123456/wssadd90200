@@ -9,7 +9,7 @@ import { formatDate, getDaysAfter, makePhoneCall, speakText } from '@/utils';
 import { mealVoiceReminders, todayForbidList, todayCautionList, todayRecommendList } from '@/data/mockData';
 
 const FamilyPage: React.FC = () => {
-  const { userInfo, careTasks, toggleCareTask } = useAppContext();
+  const { userInfo, careTasks, toggleCareTask, resetCareTasks } = useAppContext();
   const [noteText, setNoteText] = useState('');
 
   const daysAfter = useMemo(() => getDaysAfter(userInfo.surgeryDate), [userInfo.surgeryDate]);
@@ -40,15 +40,20 @@ const FamilyPage: React.FC = () => {
   const handleCheckAll = () => {
     Taro.showModal({
       title: '提示',
-      content: allDone ? '确定要重置所有任务吗？' : '确定要标记全部任务已完成吗？',
+      content: allDone ? '确定要重置所有任务吗？重置后可重新勾选。' : '确定要标记全部任务已完成吗？',
       success: (res) => {
         if (res.confirm) {
-          careTasks.forEach((task) => {
-            if (allDone ? task.checked : !task.checked) {
-              toggleCareTask(task.id);
-            }
-          });
-          Taro.showToast({ title: allDone ? '已重置' : '全部完成！', icon: 'success' });
+          if (allDone) {
+            resetCareTasks();
+            Taro.showToast({ title: '已重置，可重新勾选', icon: 'success' });
+          } else {
+            careTasks.forEach((task) => {
+              if (!task.checked) {
+                toggleCareTask(task.id);
+              }
+            });
+            Taro.showToast({ title: '全部完成！', icon: 'success' });
+          }
         }
       }
     });

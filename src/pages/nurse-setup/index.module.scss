@@ -1,0 +1,198 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  color: $color-text-white;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.headerIcon {
+  font-size: 64rpx;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.headerTitle {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.headerSubtitle {
+  font-size: 26rpx;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.formCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-lg;
+}
+
+.formTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.formGroup {
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formLabel {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.formRequired {
+  color: $color-error;
+  margin-left: 4rpx;
+}
+
+.formInput {
+  width: 100%;
+  height: 88rpx;
+  background-color: #F7F8FA;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: 30rpx;
+  color: $color-text-primary;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: $color-primary;
+    background-color: $color-bg-card;
+  }
+}
+
+.formInputPlaceholder {
+  color: #C9CDD4;
+}
+
+.formPicker {
+  width: 100%;
+  height: 88rpx;
+  background-color: #F7F8FA;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: 30rpx;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.pickerText {
+  font-size: 30rpx;
+  color: $color-text-primary;
+}
+
+.pickerPlaceholder {
+  color: #C9CDD4;
+}
+
+.pickerArrow {
+  font-size: 24rpx;
+  color: #C9CDD4;
+}
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-sm;
+}
+
+.projectItem {
+  padding: $spacing-md $spacing-sm;
+  background-color: #F7F8FA;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  text-align: center;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.projectItemSelected {
+  background-color: rgba(255, 107, 157, 0.1);
+  border-color: $color-primary;
+}
+
+.projectText {
+  font-size: 26rpx;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.projectTextSelected {
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.familySection {
+  background-color: rgba(78, 205, 196, 0.06);
+  border: 2rpx solid rgba(78, 205, 196, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.familyTitle {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-secondary;
+  display: block;
+  margin-bottom: $spacing-md;
+}
+
+.existingProfile {
+  background-color: rgba(255, 107, 157, 0.06);
+  border: 2rpx solid rgba(255, 107, 157, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.existingTitle {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.existingInfo {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
