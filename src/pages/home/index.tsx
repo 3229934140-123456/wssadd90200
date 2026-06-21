@@ -10,20 +10,33 @@ import {
   todayForbidList,
   todayCautionList,
   todayRecommendList,
-  followUpInfo as defaultFollowUp,
   mealVoiceReminders
 } from '@/data/mockData';
 import { formatDate, getDaysAfter, speakText, makePhoneCall, getTodayStr } from '@/utils';
 
 const HomePage: React.FC = () => {
-  const { userInfo, isProfileSetup, records } = useAppContext();
+  const { userInfo, isProfileSetup, getActiveRecord } = useAppContext();
   const daysAfter = useMemo(() => getDaysAfter(userInfo.surgeryDate), [userInfo.surgeryDate]);
   const todayStr = getTodayStr();
 
-  const latestRecord = records[0];
-  const followUp = latestRecord?.nextFollowUp
-    ? { hasAppointment: true, date: latestRecord.nextFollowUp, time: '按预约时间', note: '请提前10分钟到院', projectName: latestRecord.projectName, daysAfter }
-    : defaultFollowUp;
+  // 从活跃Record获取复诊和计划信息，完全同步建档/复诊编辑数据
+  const activeRecord = getActiveRecord();
+  const projectName = activeRecord?.projectName || userInfo.projectName;
+  const followUp = useMemo(() => {
+    if (activeRecord?.nextFollowUp) {
+      return {
+        hasAppointment: true,
+        date: activeRecord.nextFollowUp,
+        time: '按预约时间',
+        note: activeRecord.surgeryPlan?.followUpReminder || '请提前10分钟到院，携带就诊卡',
+        projectName,
+        daysAfter
+      };
+    }
+    return { hasAppointment: false, projectName, daysAfter };
+  }, [activeRecord, projectName, daysAfter]);
+
+  const surgeryPlan = activeRecord?.surgeryPlan;
 
   const getGreeting = (): string => {
     const hour = new Date().getHours();
@@ -42,10 +55,26 @@ const HomePage: React.FC = () => {
   const handleSpeakAll = () => {
     const forbidSummary = todayForbidList.map((w) => `${w.title}：${w.foods.join('、')}。${w.reason}`).join(' ');
     const recommendSummary = todayRecommendList.map((r) => `${r.name}：${r.benefit}`).join(' ');
-    const followUpText = defaultFollowUp.hasAppointment
-      ? `复诊提醒：${formatDate(defaultFollowUp.date!)} ${defaultFollowUp.time}。${defaultFollowUp.note}`
-      : '暂无复诊安排。';
-    const fullText = `${getGreeting()}，${userInfo.name}！今天是您术后第${daysAfter}天。${forbidSummary} 推荐您吃：${recommendSummary} ${followUpText}`;
+
+    // 语音播报完全基于最新的activeRecord
+    let planSummary = '';
+    if (surgeryPlan) {
+      if (surgeryPlan.stitchRemovalDate) {
+        planSummary += `拆线日期是${formatDate(surgeryPlan.stitchRemovalDate)}。`;
+      }
+      if (surgeryPlan.medicationPlan) {
+        planSummary += `用药提醒：${surgeryPlan.medicationPlan}。`;
+      }
+    }
+
+    let followUpText = '';
+    if (followUp.hasAppointment && followUp.date) {
+      followUpText = `复诊提醒：${formatDate(followUp.date)}。${followUp.note}`;
+    } else {
+      followUpText = '暂无复诊安排，请继续注意休息。';
+    }
+
+    const fullText = `${getGreeting()}，${userInfo.name}！今天是您${projectName}术后第${daysAfter}天。${planSummary}${forbidSummary} 推荐您吃：${recommendSummary} ${followUpText}`;
     speakText(fullText);
   };
 
@@ -55,6 +84,14 @@ const HomePage: React.FC = () => {
 
   const handleGoSetup = () => {
     Taro.navigateTo({ url: '/pages/nurse-setup/index' });
+  };
+
+  const handleGoPlanDetail = () => {
+    if (activeRecord) {
+      Taro.navigateTo({ url: `/pages/record-detail/index?id=${activeRecord.id}` });
+    } else {
+      handleGoSetup();
+    }
   };
 
   const handleRefresh = () => {
@@ -77,9 +114,10 @@ const HomePage: React.FC = () => {
               <Text className={styles.greetingText}>
                 {getGreeting()}，{userInfo.name}
               </Text>
-              <Text className={styles.projectInfo}>{userInfo.projectName}</Text>
+              <Text className={styles.projectInfo}>{projectName}</Text>
               <Text className={styles.surgeryDate}>
                 手术日：{formatDate(userInfo.surgeryDate)}
+                {surgeryPlan?.stitchRemovalDate && ` · 拆线日：${formatDate(surgeryPlan.stitchRemovalDate)}`}
               </Text>
             </View>
             <View className={styles.dayBadge}>术后第 {daysAfter} 天</View>
@@ -118,7 +156,7 @@ const HomePage: React.FC = () => {
         )}
         {isProfileSetup && (
           <View style={{ marginTop: 16 }}>
-            <BigButton text="修改建档信息" icon="✏️" type="default" onClick={handleGoSetup} />
+            <BigButton text="查看完整术后计划" icon="📋" type="default" onClick={handleGoPlanDetail} />
           </View>
         )}
       </View>
@@ -138,6 +176,23 @@ const HomePage: React.FC = () => {
           <WarnCard key={item.id} data={item} />
         ))}
 
+        {surgeryPlan?.forbiddenInstructions && (
+          <View style={{
+            marginTop: 24,
+            padding: 24,
+            backgroundColor: 'rgba(245,63,63,0.06)',
+            borderRadius: 16,
+            border: '2rpx solid rgba(245,63,63,0.15)'
+          }}>
+            <Text style={{ fontSize: 28, fontWeight: 600, color: '#F53F3F', display: 'block', marginBottom: 8 }}>
+              ⚠️ 护士特别叮嘱
+            </Text>
+            <Text style={{ fontSize: 26, color: '#4E5969', lineHeight: 1.8 }}>
+              {surgeryPlan.forbiddenInstructions}
+            </Text>
+          </View>
+        )}
+
         <View className={styles.sectionTitle}>
           <Text className={styles.titleText}>✅ 今天该吃什么</Text>
           <Text className={styles.titleBadge} style={{ backgroundColor: 'rgba(0,180,42,0.1)', color: '#00B42A' }}>
@@ -151,17 +206,51 @@ const HomePage: React.FC = () => {
           <RecommendCard key={item.id} data={item} />
         ))}
 
+        {surgeryPlan?.medicationPlan && (
+          <View style={{
+            marginTop: 24,
+            padding: 24,
+            backgroundColor: 'rgba(22,93,255,0.06)',
+            borderRadius: 16,
+            border: '2rpx solid rgba(22,93,255,0.15)'
+          }}>
+            <Text style={{ fontSize: 28, fontWeight: 600, color: '#165DFF', display: 'block', marginBottom: 8 }}>
+              💊 用药计划
+            </Text>
+            <Text style={{ fontSize: 26, color: '#4E5969', lineHeight: 1.8 }}>
+              {surgeryPlan.medicationPlan}
+            </Text>
+          </View>
+        )}
+
+        {surgeryPlan?.dailyCareFocus && (
+          <View style={{
+            marginTop: 24,
+            padding: 24,
+            backgroundColor: 'rgba(78,205,196,0.08)',
+            borderRadius: 16,
+            border: '2rpx solid rgba(78,205,196,0.2)'
+          }}>
+            <Text style={{ fontSize: 28, fontWeight: 600, color: '#1FB5AD', display: 'block', marginBottom: 8 }}>
+              🌡️ 每天护理重点
+            </Text>
+            <Text style={{ fontSize: 26, color: '#4E5969', lineHeight: 1.8 }}>
+              {surgeryPlan.dailyCareFocus}
+            </Text>
+          </View>
+        )}
+
         <View className={styles.sectionTitle}>
           <Text className={styles.titleText}>📅 是否需要复诊</Text>
         </View>
-        {defaultFollowUp.hasAppointment ? (
+        {followUp.hasAppointment && followUp.date ? (
           <View className={styles.followUpCard}>
             <Text className={styles.followUpTitle}>⚠️ 您有复诊安排</Text>
-            <Text className={styles.followUpDate}>{formatDate(defaultFollowUp.date!)}</Text>
-            <Text className={styles.followUpTime}>{defaultFollowUp.time} · {defaultFollowUp.projectName}术后第{defaultFollowUp.daysAfter}天复查</Text>
-            <Text className={styles.followUpNote}>📝 {defaultFollowUp.note}</Text>
+            <Text className={styles.followUpDate}>{formatDate(followUp.date)}</Text>
+            <Text className={styles.followUpTime}>{followUp.time} · {projectName}术后第{followUp.daysAfter}天复查</Text>
+            <Text className={styles.followUpNote}>📝 {followUp.note}</Text>
             <View style={{ marginTop: 32 }}>
-              <BigButton text="一键导航到门店" icon="🧭" type="warning" onClick={() => Taro.showToast({ title: '导航功能开发中', icon: 'none' })} />
+              <BigButton text="查看完整复诊计划" icon="📋" type="warning" onClick={handleGoPlanDetail} />
             </View>
           </View>
         ) : (

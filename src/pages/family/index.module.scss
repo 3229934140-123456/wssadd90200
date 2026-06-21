@@ -368,3 +368,230 @@
   color: rgba(255, 255, 255, 0.9);
   display: block;
 }
+
+// 照护日历
+.calendarSection {
+  margin-top: $spacing-lg;
+}
+
+.calendarCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.calendarMonth {
+  font-size: 32rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.calendarNav {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.calendarNavBtn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: $radius-button;
+  font-size: 28rpx;
+  color: $color-text-secondary;
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.calendarWeekRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.calendarWeekDay {
+  text-align: center;
+  font-size: 24rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-tertiary;
+  padding: $spacing-xs 0;
+}
+
+.calendarDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8rpx;
+}
+
+.calendarDay {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-md;
+  background-color: rgba(0, 0, 0, 0.02);
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.calendarDayEmpty {
+  background-color: transparent;
+}
+
+.calendarDaySelected {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 12rpx rgba(255, 107, 157, 0.3);
+}
+
+.calendarDayToday {
+  border: 3rpx solid $color-primary;
+}
+
+.calendarDayNumber {
+  font-size: 28rpx;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.calendarDaySelected .calendarDayNumber {
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.calendarDayDots {
+  display: flex;
+  gap: 4rpx;
+  margin-top: 4rpx;
+}
+
+.calendarDot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background-color: $color-success;
+}
+
+.calendarDaySelected .calendarDot {
+  background-color: $color-text-white;
+}
+
+.calendarLegend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-lg;
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+}
+
+.legendDot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: $color-success;
+  margin-right: $spacing-xs;
+}
+
+.legendRing {
+  width: 16rpx;
+  height: 16rpx;
+  border: 3rpx solid $color-primary;
+  border-radius: $radius-round;
+  margin-right: $spacing-xs;
+  box-sizing: border-box;
+}
+
+.legendFill {
+  width: 16rpx;
+  height: 16rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: 4rpx;
+  margin-right: $spacing-xs;
+}
+
+.calendarSelectedInfo {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+}
+
+.selectedDateTitle {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.selectedDateStats {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.statItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-sm;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: $radius-md;
+}
+
+.statNum {
+  font-size: 32rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  display: block;
+}
+
+.statLabel {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+}
+
+.planTipCard {
+  background-color: rgba(78, 205, 196, 0.08);
+  border: 2rpx solid rgba(78, 205, 196, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.planTipTitle {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-secondary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.planTipText {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}

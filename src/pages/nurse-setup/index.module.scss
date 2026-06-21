@@ -91,6 +91,19 @@
   }
 }
 
+.formTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  background-color: #F7F8FA;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  font-size: 28rpx;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
 .formInputPlaceholder {
   color: #C9CDD4;
 }

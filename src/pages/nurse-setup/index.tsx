@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, Input, Picker, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import { useAppContext } from '@/store/AppContext';
 import BigButton from '@/components/BigButton';
 import classnames from 'classnames';
-import type { UserInfo } from '@/types';
+import type { UserInfo, SurgeryPlan } from '@/types';
+import { defaultSurgeryPlan } from '@/data/mockData';
+import { addDays } from '@/utils';
 
 const PROJECT_OPTIONS = [
   '双眼皮手术', '隆鼻手术', '面部除皱', '瘦脸针',
@@ -15,7 +17,10 @@ const PROJECT_OPTIONS = [
 ];
 
 const NurseSetupPage: React.FC = () => {
-  const { userInfo, isProfileSetup, saveProfile, resetAllData } = useAppContext();
+  const { userInfo, isProfileSetup, saveProfile, resetAllData, getActiveRecord } = useAppContext();
+  const activeRecord = getActiveRecord();
+
+  const initialPlan = activeRecord?.surgeryPlan;
 
   const [name, setName] = useState(isProfileSetup ? userInfo.name : '');
   const [age, setAge] = useState(isProfileSetup ? String(userInfo.age) : '');
@@ -29,6 +34,31 @@ const NurseSetupPage: React.FC = () => {
   const [familyName, setFamilyName] = useState(isProfileSetup ? (userInfo.familyName || '') : '');
   const [familyPhone, setFamilyPhone] = useState(isProfileSetup ? (userInfo.familyPhone || '') : '');
 
+  // 术后计划字段
+  const [stitchRemovalDate, setStitchRemovalDate] = useState(
+    initialPlan?.stitchRemovalDate || (surgeryDate ? addDays(surgeryDate, 7) : '')
+  );
+  const [dailyCareFocus, setDailyCareFocus] = useState(
+    initialPlan?.dailyCareFocus || defaultSurgeryPlan.dailyCareFocus
+  );
+  const [forbiddenInstructions, setForbiddenInstructions] = useState(
+    initialPlan?.forbiddenInstructions || defaultSurgeryPlan.forbiddenInstructions
+  );
+  const [followUpReminder, setFollowUpReminder] = useState(
+    initialPlan?.followUpReminder || defaultSurgeryPlan.followUpReminder
+  );
+  const [medicationPlan, setMedicationPlan] = useState(
+    initialPlan?.medicationPlan || defaultSurgeryPlan.medicationPlan
+  );
+  const [nextFollowUp, setNextFollowUp] = useState(activeRecord?.nextFollowUp || '');
+
+  // 选好手术日期后，自动计算拆线日期（默认7天）
+  React.useEffect(() => {
+    if (surgeryDate && !stitchRemovalDate) {
+      setStitchRemovalDate(addDays(surgeryDate, 7));
+    }
+  }, [surgeryDate, stitchRemovalDate]);
+
   const handleSelectProject = (project: string) => {
     setSelectedProject(project === selectedProject ? '' : project);
     setCustomProject('');
@@ -36,6 +66,14 @@ const NurseSetupPage: React.FC = () => {
 
   const handleDateChange = (e) => {
     setSurgeryDate(e.detail.value);
+  };
+
+  const handleStitchDateChange = (e) => {
+    setStitchRemovalDate(e.detail.value);
+  };
+
+  const handleFollowUpDateChange = (e) => {
+    setNextFollowUp(e.detail.value);
   };
 
   const handleSave = () => {
@@ -65,7 +103,7 @@ const NurseSetupPage: React.FC = () => {
 
     Taro.showModal({
       title: '确认保存',
-      content: `顾客：${name}\n项目：${finalProject}\n手术日期：${surgeryDate}\n护士：${nurseName}\n家属：${familyName || '未绑定'}\n\n确认保存建档信息？`,
+      content: `顾客：${name}\n项目：${finalProject}\n手术日期：${surgeryDate}\n拆线日期：${stitchRemovalDate || '术后7天'}\n护士：${nurseName}\n家属：${familyName || '未绑定'}\n\n确认保存建档信息？`,
       success: (res) => {
         if (res.confirm) {
           const profile: UserInfo = {
@@ -80,7 +118,16 @@ const NurseSetupPage: React.FC = () => {
             familyName: familyName.trim() || undefined,
             familyPhone: familyPhone.trim() || undefined
           };
-          saveProfile(profile);
+
+          const plan: SurgeryPlan = {
+            stitchRemovalDate: stitchRemovalDate || undefined,
+            dailyCareFocus: dailyCareFocus.trim(),
+            forbiddenInstructions: forbiddenInstructions.trim(),
+            followUpReminder: followUpReminder.trim(),
+            medicationPlan: medicationPlan.trim() || undefined
+          };
+
+          saveProfile(profile, plan, nextFollowUp || undefined);
           Taro.showToast({ title: '建档成功！', icon: 'success', duration: 2000 });
           setTimeout(() => {
             Taro.switchTab({ url: '/pages/home/index' });
@@ -109,6 +156,12 @@ const NurseSetupPage: React.FC = () => {
             setStoreName('美丽人生医美中心（朝阳店）');
             setFamilyName('王女士（女儿）');
             setFamilyPhone('139****8765');
+            setStitchRemovalDate(addDays('2026-06-18', 7));
+            setDailyCareFocus(defaultSurgeryPlan.dailyCareFocus);
+            setForbiddenInstructions(defaultSurgeryPlan.forbiddenInstructions);
+            setFollowUpReminder(defaultSurgeryPlan.followUpReminder);
+            setMedicationPlan(defaultSurgeryPlan.medicationPlan);
+            setNextFollowUp('2026-06-25');
           }, 500);
         }
       }
@@ -121,7 +174,7 @@ const NurseSetupPage: React.FC = () => {
         <Text className={styles.headerIcon}>👩‍⚕️</Text>
         <Text className={styles.headerTitle}>院内护士建档</Text>
         <Text className={styles.headerSubtitle}>
-          为顾客建立术后恢复档案，选择项目并绑定家属，{'\n'}保存后顾客和家属都能看到同一套信息
+          为顾客建立术后恢复档案，选择项目、制定术后计划、绑定家属，{'\n'}保存后顾客端和家属端同步可见
         </Text>
       </View>
 
@@ -134,7 +187,7 @@ const NurseSetupPage: React.FC = () => {
             手术日期：{userInfo.surgeryDate}{'\n'}
             护士：{userInfo.nurseName}{'\n'}
             家属：{userInfo.familyName || '未绑定'}{'\n\n'}
-            修改后点保存即可更新
+            修改后点保存即可同步更新
           </Text>
         </View>
       )}
@@ -228,6 +281,80 @@ const NurseSetupPage: React.FC = () => {
       </View>
 
       <View className={styles.formCard}>
+        <Text className={styles.formTitle}>📋 术后恢复计划</Text>
+
+        <View className={styles.formGroup}>
+          <Text className={styles.formLabel}>拆线日期</Text>
+          <Picker mode="date" value={stitchRemovalDate} onChange={handleStitchDateChange}>
+            <View className={styles.formPicker}>
+              <Text className={stitchRemovalDate ? styles.pickerText : styles.pickerPlaceholder}>
+                {stitchRemovalDate || '默认术后第7天拆线'}
+              </Text>
+              <Text className={styles.pickerArrow}>▼</Text>
+            </View>
+          </Picker>
+        </View>
+
+        <View className={styles.formGroup}>
+          <Text className={styles.formLabel}>下次复诊日期</Text>
+          <Picker mode="date" value={nextFollowUp} onChange={handleFollowUpDateChange}>
+            <View className={styles.formPicker}>
+              <Text className={nextFollowUp ? styles.pickerText : styles.pickerPlaceholder}>
+                {nextFollowUp || '请选择下次复诊日期（可不填）'}
+              </Text>
+              <Text className={styles.pickerArrow}>▼</Text>
+            </View>
+          </Picker>
+        </View>
+
+        <View className={styles.formGroup}>
+          <Text className={styles.formLabel}>每天护理重点</Text>
+          <Input
+            type="textarea"
+            className={styles.formTextarea}
+            value={dailyCareFocus}
+            onInput={(e) => setDailyCareFocus(e.detail.value)}
+            maxlength={500}
+          />
+        </View>
+
+        <View className={styles.formGroup}>
+          <Text className={styles.formLabel}>禁忌说明</Text>
+          <Input
+            type="textarea"
+            className={styles.formTextarea}
+            value={forbiddenInstructions}
+            onInput={(e) => setForbiddenInstructions(e.detail.value)}
+            maxlength={500}
+          />
+        </View>
+
+        <View className={styles.formGroup}>
+          <Text className={styles.formLabel}>复诊提醒</Text>
+          <Input
+            type="textarea"
+            className={styles.formTextarea}
+            value={followUpReminder}
+            onInput={(e) => setFollowUpReminder(e.detail.value)}
+            maxlength={500}
+          />
+        </View>
+
+        <View className={styles.formGroup}>
+          <Text className={styles.formLabel}>用药计划</Text>
+          <Input
+            type="textarea"
+            className={styles.formTextarea}
+            value={medicationPlan}
+            onInput={(e) => setMedicationPlan(e.detail.value)}
+            placeholder="如：头孢克肟每天2次每次1粒，吃5天"
+            placeholderClass={styles.formInputPlaceholder}
+            maxlength={500}
+          />
+        </View>
+      </View>
+
+      <View className={styles.formCard}>
         <Text className={styles.formTitle}>👩‍⚕️ 护士与门店</Text>
 
         <View className={styles.formGroup}>
@@ -292,7 +419,7 @@ const NurseSetupPage: React.FC = () => {
         </View>
       </View>
 
-      <BigButton text="保存建档信息" icon="💾" type="primary" onClick={handleSave} />
+      <BigButton text="保存建档信息和术后计划" icon="💾" type="primary" onClick={handleSave} />
       <View style={{ height: 16 }} />
       <BigButton text="重置为演示数据" icon="🔄" type="default" onClick={handleReset} />
       <View style={{ height: 40 }} />

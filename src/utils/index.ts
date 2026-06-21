@@ -103,3 +103,27 @@ export const getStatusColor = (status: 'allow' | 'caution' | 'forbid' | 'consult
   };
   return map[status];
 };
+
+export const addDays = (dateStr: string, days: number): string => {
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + days);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
+
+export const getDateLabel = (dateStr: string): string => {
+  const today = new Date();
+  const target = new Date(dateStr);
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  if (dateStr === todayStr) return '今天';
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+  if (dateStr === yStr) return '昨天';
+  const diff = Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  if (diff > 0) return `${diff}天后`;
+  if (diff < 0) return `${Math.abs(diff)}天前`;
+  return '今天';
+};

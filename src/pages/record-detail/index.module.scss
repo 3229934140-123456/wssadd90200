@@ -56,6 +56,15 @@
   margin-top: $spacing-sm;
 }
 
+.activeBadge {
+  display: inline-block;
+  margin-top: $spacing-sm;
+  padding: $spacing-xs $spacing-sm;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: $radius-button;
+  font-size: 22rpx;
+}
+
 .sectionCard {
   background-color: $color-bg-card;
   border-radius: $radius-lg;
@@ -74,10 +83,46 @@
   border-bottom: 2rpx solid $color-divider;
 }
 
+.cardSubtitle {
+  font-size: 26rpx;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
 .notesText {
   font-size: 30rpx;
   color: $color-text-primary;
   line-height: 1.8;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-md;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: $radius-md;
+}
+
+.infoLabel {
+  font-size: 24rpx;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.infoValue {
+  font-size: 28rpx;
+  color: $color-text-primary;
+  font-weight: $font-weight-semibold;
+  line-height: 1.5;
 }
 
 .forbidSection {
@@ -178,6 +223,130 @@
   color: $color-success;
 }
 
+.planSection {
+  margin-bottom: $spacing-md;
+}
+
+.planBlock {
+  padding: $spacing-md;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+}
+
+.planBlockTitle {
+  font-size: 26rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.planBlockText {
+  font-size: 28rpx;
+  color: $color-text-primary;
+  line-height: 1.7;
+}
+
+// 护士回访记录
+.nurseNoteCard {
+  background-color: rgba(78, 205, 196, 0.06);
+  border: 2rpx solid rgba(78, 205, 196, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  position: relative;
+}
+
+.nurseNoteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.nurseNoteLeft {
+  display: flex;
+  align-items: center;
+}
+
+.nurseAvatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-secondary 0%, $color-secondary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-sm;
+  color: $color-text-white;
+  font-size: 28rpx;
+  font-weight: $font-weight-bold;
+}
+
+.nurseName {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+}
+
+.nurseDate {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+}
+
+.nurseNoteBody {
+  margin-bottom: $spacing-sm;
+}
+
+.noteRow {
+  margin-bottom: $spacing-sm;
+}
+
+.noteRow:last-child {
+  margin-bottom: 0;
+}
+
+.noteLabel {
+  font-size: 24rpx;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.noteText {
+  font-size: 28rpx;
+  color: $color-text-primary;
+  line-height: 1.7;
+}
+
+.nurseNoteTime {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+  text-align: right;
+}
+
+.emptyNurseNote {
+  padding: $spacing-xl 0;
+  text-align: center;
+}
+
+.emptyNoteIcon {
+  font-size: 64rpx;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.emptyNoteText {
+  font-size: 28rpx;
+  color: $color-text-tertiary;
+}
+
+.addNoteBtn {
+  margin-top: $spacing-md;
+}
+
 .editSection {
   background-color: $color-bg-card;
   border-radius: $radius-lg;
@@ -209,7 +378,7 @@
 
 .editTextarea {
   width: 100%;
-  min-height: 160rpx;
+  min-height: 140rpx;
   background-color: #F7F8FA;
   border: 2rpx solid $color-border;
   border-radius: $radius-md;
@@ -218,4 +387,24 @@
   color: $color-text-primary;
   box-sizing: border-box;
   margin-bottom: $spacing-md;
+  line-height: 1.6;
+}
+
+.editPlaceholder {
+  color: #C9CDD4;
+}
+
+.noteFormLabel {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.tagInputHint {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-xs;
 }
